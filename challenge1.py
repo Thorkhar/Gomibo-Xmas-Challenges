@@ -12,9 +12,11 @@ def parse(instr: str) -> int:
         if i == ")":
             floor -= 1
             close_cnt += 1
+    
+    print('Santa has ended at floor ' + str(floor) + ' by going up ' + str(open_cnt) + ' times and going down ' + str(close_cnt) + ' times')
     return [floor, open_cnt, close_cnt]
 
 with open('input1.txt', 'r') as file:
     instructions = file.read()
 
-print(parse(instructions)[0])
+parse(instructions)

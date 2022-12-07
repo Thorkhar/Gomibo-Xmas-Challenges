@@ -52,10 +52,11 @@ def crack_code(instr_set: list, keypad: list):
     code = ''
     for num in code_coords:
         code += str(keypad[num[0]][num[1]])
-        
+    
+    print('The door code is ' + code)
     return code
 
 with open('input2.txt', 'r') as file:
     instructions = file.read().split('\n')
 
-print(crack_code(instructions, keypad))
+crack_code(instructions, keypad)
