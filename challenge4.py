@@ -18,42 +18,46 @@ class ChocolateMilk:
                 self.history[cmd[1]] = [0]
     
     def find_freq(self):
-        while self.current_instruction in range(len(self.instructions)):
-            self.ecex_instr(self.current_instruction)
-            self.current_instruction += 1
+        while self.current_instruction < 41 and self.current_instruction >= 0:
+            self.exec_instr(self.current_instruction)
 
-    def ecex_instr(self, instr_idx: int):
+    def exec_instr(self, instr_idx: int):
         instr = self.instructions[instr_idx].split()
-        print(instr)
         cmd = instr[0]
         if cmd == 'snd':
             self.santa_snd(instr[1])
+            self.current_instruction += 1
         elif cmd == 'set':
             if instr[2] in self.registers:
                 y = self.registers[instr[2]]
             else:
                 y = int(instr[2])
             self.santa_set(instr[1], y)
+            self.current_instruction += 1
         elif cmd == 'add':
             if instr[2] in self.registers:
                 y = self.registers[instr[2]]
             else:
                 y = int(instr[2])
             self.santa_add(instr[1], y)
+            self.current_instruction += 1
         elif cmd == 'mul':
             if instr[2] in self.registers:
                 y = self.registers[instr[2]]
             else:
                 y = int(instr[2])
             self.santa_mul(instr[1], y)
+            self.current_instruction += 1
         elif cmd == 'mod':
             if instr[2] in self.registers:
                 y = self.registers[instr[2]]
             else:
                 y = int(instr[2])
             self.santa_mod(instr[1], y)
+            self.current_instruction += 1
         elif cmd == 'rcv':
             self.santa_rcv(instr[1])
+            self.current_instruction = -1
         elif cmd == 'jgz':
             if instr[1] == '1':
                 x = 1
@@ -67,8 +71,8 @@ class ChocolateMilk:
             self.santa_jgz(x, y)
 
     def santa_snd(self, x):
-        print(self.registers[x])
-        self.snd_history.append([x, self.registers[x]])
+        self.snd_history.append(self.registers[x])
+        print('Sounded ' + str(self.registers[x]))
 
     def santa_set(self, x: str, y:int):
         if x in self.registers:
@@ -86,8 +90,8 @@ class ChocolateMilk:
     
     def santa_rcv(self, x:str):
         if self.registers[x] != 0:
-            idx = len(self.snd_history) - 1
-            self.santa_set(x, self.snd_history[idx][1])
+            self.santa_set(x, self.snd_history[-1])
+            print('Recovered to ' + str(self.snd_history[-1]))
     
     def santa_jgz(self, x:str, y:int):
         if type(x) == int:
@@ -95,7 +99,11 @@ class ChocolateMilk:
         else:
             x_prime = self.registers[x]
         if x_prime > 0:
-            self.current_instruction -= (y + 1)
+            self.current_instruction += y
+        else:
+            self.current_instruction += 1
+            
 
 x = ChocolateMilk()
+x.registers['f'] = 3
 x.find_freq()
