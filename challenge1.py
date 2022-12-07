@@ -1,3 +1,5 @@
+# Santa cardio
+
 def parse(instr: str) -> int:
     floor = 0
     open_cnt = 0
@@ -15,4 +17,4 @@ def parse(instr: str) -> int:
 with open('input1.txt', 'r') as file:
     instructions = file.read()
 
-print(parse(instructions))
+print(parse(instructions)[0])
