@@ -8,6 +8,7 @@ class ChocolateMilk:
             self.instructions = file.read().split('\n')
         self.current_instruction = 0 # Index of current instruction
         self.registers = {}
+        self.frequency = ''
         self.create_registers()
 
     def create_registers(self):
@@ -57,7 +58,8 @@ class ChocolateMilk:
             self.current_instruction += 1
         elif cmd == 'rcv':
             self.santa_rcv(instr[1])
-            self.current_instruction = -1
+            self.current_instruction = -1 # Set to -1 to finish the loop, else it gets infinite and we only need the answer from the first recovery
+            self.frequency = str(self.registers[instr[1]])
         elif cmd == 'jgz':
             if instr[1] == '1':
                 x = 1
@@ -72,7 +74,6 @@ class ChocolateMilk:
 
     def santa_snd(self, x):
         self.snd_history.append(self.registers[x])
-        print('Sounded ' + str(self.registers[x]))
 
     def santa_set(self, x: str, y:int):
         if x in self.registers:
@@ -91,7 +92,6 @@ class ChocolateMilk:
     def santa_rcv(self, x:str):
         if self.registers[x] != 0:
             self.santa_set(x, self.snd_history[-1])
-            print('Recovered to ' + str(self.snd_history[-1]))
     
     def santa_jgz(self, x:str, y:int):
         if type(x) == int:
@@ -107,3 +107,4 @@ class ChocolateMilk:
 x = ChocolateMilk()
 x.registers['f'] = 3
 x.find_freq()
+print('The frequency Santa needed to whistle at was ' + x.frequency)
